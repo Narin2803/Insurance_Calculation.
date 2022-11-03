@@ -1,0 +1,35 @@
+version: "3"
+
+
+
+services:
+
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile-prod
+        environment:
+            - API_URL=${API_URL}
+            - PORT=${PORT}
+            - VIRTUAL_HOST=${SERVER_VIRTUAL_HOST}
+        ports:
+            - ${PORT}:${PORT}
+        volumes:
+         
+            - ./server/src:/app/server/src
+        command: npm run build
+        restart: always
+
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile-prod
+        ports:
+            - 80:80
+        links:
+            - server
+        restart: always
+
+
+volumes:
+  ? board-dbdata
